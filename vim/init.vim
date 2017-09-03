@@ -5,7 +5,6 @@ set history=500
 let mapleader="\<Space>"
 inoremap jk <esc>
 map <silent> <leader><cr> :noh<cr>
-map <silent> <leader>o :FZF<cr>
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
@@ -94,6 +93,7 @@ Plug 'neomake/neomake'
 Plug 'jason0x43/vim-tss', { 'for': [ 'typescript', 'javascript' ], 'do': 'npm install' }
 Plug 'jiangmiao/auto-pairs'
 Plug 'mhartington/nvim-typescript'
+Plug 'valloric/matchtagalways'
 "Plug 'scrooloose/syntastic'
 "Plug 'leafgarland/typescript-vim'
 "Plug 'Quramy/tsuquyomi'
@@ -130,6 +130,9 @@ nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
 " FZF
+map <silent> <leader>o :FZF<cr>
+map <silent> <leader>f :Ag<cr>
+
 let g:fzf_command_prefix = 'Fzf'
 let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
@@ -195,14 +198,18 @@ let g:tss_completion_ignore_case = 1
 
 " Deoplete
 let g:deoplete#enable_at_startup = 1
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 let g:deoplete#enable_profile = 1
+let g:deoplete#enable_debug = 1
+let deoplete#tag#cache_limit_size = 5000000
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+autocmd CompleteDone * silent! pclose!
 
 " NERDTree
 autocmd vimenter * NERDTree
 let NERDTreeShowHidden=1
 "autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 map <leader>n :NERDTreeToggle<cr>
+map <leader>r :NERDTreeFind<cr>
 
 " NERDCommenter
 let g:NERDSpaceDelims = 1
@@ -220,7 +227,3 @@ let g:airline_theme='papercolor'
 " let g:airline_theme='pencil'
 " let g:pencil_higher_contrast_ui = 0   " 0=low (def), 1=high
 " let g:pencil_neutral_code_bg = 0   " 0=gray (def), 1=normal
-
-
-
-
