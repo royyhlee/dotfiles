@@ -3,8 +3,10 @@ set history=500
 
 " Key map
 let mapleader="\<Space>"
+
 inoremap jk <esc>
 map <silent> <leader><cr> :noh<cr>
+map <leader>w :w<cr>
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
@@ -25,6 +27,23 @@ set wrap "Wrap lines
 " Super useful! From an idea by Michael Naumann
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+
+function! VisualSelection(direction, extra_filter) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", "\\/.*'$^~[]")
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'gv'
+        call CmdLine("Ack '" . l:pattern . "' " )
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
 
 " Enable syntax highlighting
 syntax enable 
@@ -89,17 +108,18 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 Plug 'pangloss/vim-javascript'
 Plug 'Quramy/vim-js-pretty-template'
+Plug 'jason0x43/vim-tss', { 'for': [ 'typescript', 'javascript' ], 'do': 'npm install'}
+" Plug 'mhartington/nvim-typescript'
 Plug 'neomake/neomake'
-Plug 'jason0x43/vim-tss', { 'for': [ 'typescript', 'javascript' ], 'do': 'npm install' }
 Plug 'jiangmiao/auto-pairs'
-Plug 'mhartington/nvim-typescript'
+Plug 'palantir/tslint'
 Plug 'valloric/matchtagalways'
-"Plug 'scrooloose/syntastic'
-"Plug 'leafgarland/typescript-vim'
-"Plug 'Quramy/tsuquyomi'
-"Plug 'w0rp/ale'
+Plug 'quramy/tsuquyomi'
+Plug 'alvan/vim-closetag'
+" Plug 'w0rp/ale'
 
 " VIM
+Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-surround'
 Plug 'junegunn/vim-easy-align'
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
@@ -109,8 +129,8 @@ Plug 'scrooloose/nerdcommenter'
 " ETC
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'junegunn/seoul256.vim'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'tpope/vim-fugitive'
 
 " Theme
 Plug 'rakr/vim-one'
@@ -120,7 +140,6 @@ Plug 'ayu-theme/ayu-vim'
 Plug 'ayu-theme/ayu-vim-airline'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'altercation/vim-colors-solarized'
 Plug 'NLKNguyen/papercolor-theme'
 
 call plug#end()
@@ -146,7 +165,7 @@ let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 "   :Ag  - Start fzf with hidden preview window that can be enabled with "?" key
 "   :Ag! - Start fzf in fullscreen and display the preview window above
 command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
+  \ call fzf#vim#ag(<q-args>, 
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
   \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
   \                 <bang>0)
@@ -182,8 +201,9 @@ autocmd! BufWritePost * Neomake
 " vim-js-indent
 let js_indent_typescript = 0
 
-" NVIM Typescript
-map <silent> <leader>i :TSImport<cr>
+" Tsuquyomi
+map <leader>i :TsuImport<cr>
+let g:tsuquyomi_shortest_import_path = 1
 
 " Typescript-vim
 " autocmd QuickFixCmdPost [^l]* nested cwindow
@@ -191,6 +211,12 @@ map <silent> <leader>i :TSImport<cr>
 
 " Airline
 let g:airline_powerline_fonts = 1
+
+" ALE
+let g:ale_linters = {
+\    'typescript': ['tsserver'],
+\}
+let g:airline#extensions#ale#enabled = 1
 
 " vim-tss
 "let g:tss_auto_open_loclist = 1
@@ -216,8 +242,14 @@ let g:NERDSpaceDelims = 1
 
 " Theme
 set background=light
-colorscheme PaperColor
-let g:airline_theme='papercolor'
+let g:airline_theme='seoul256'
+let g:seoul256_background = 238
+let g:seoul256_light_background = 253
+
+" colo seoul256
+colo seoul256-light
+
+" colorscheme PaperColor
 
 " Ayu
 "let ayucolor="dark" " for mirage version of theme
@@ -227,3 +259,7 @@ let g:airline_theme='papercolor'
 " let g:airline_theme='pencil'
 " let g:pencil_higher_contrast_ui = 0   " 0=low (def), 1=high
 " let g:pencil_neutral_code_bg = 0   " 0=gray (def), 1=normal
+
+
+
+
