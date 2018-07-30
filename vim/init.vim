@@ -1,36 +1,45 @@
-" Sets how many lines of history VIM has to remember
+" Settings
 set history=500
-
-" Key map
-let mapleader="\<Space>"
-
-inoremap jk <esc>
-map <silent> <leader><cr> :noh<cr>
-
-map <leader>w :wa<cr>
-" map <leader>W :wa<cr>
-
-map <leader>q :q<cr>
-map <leader>Q :qa<cr>
-
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
-
-
-" Tabs
 set expandtab
 set smarttab " Be smart when using tabs ;)
 set shiftwidth=2
 set tabstop=2
-
-" Indent
 set ai  " Auto Indent
 set si  " Smart Indent
 set wrap "Wrap lines
+hi link ALEErrorSign    Error
+hi link ALEWarningSign  Warning
+
+" Key map
+let mapleader="\<Space>"
+inoremap jk <esc>
+map <silent> <leader><cr> :noh<cr>
+map <leader>w :wa<cr>
+map <leader>q :q<cr>
+map <leader>Q :qa<cr>
+
+" Tab Select
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+" Split Movement
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
+" Scroll
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
+
+" Quickfix
+nnoremap cj :cn<CR>
+nnoremap ck :cp<CR>
+
+" Tab
+nnoremap tl :tabnext<CR>
+nnoremap th :tabprev<CR>
+nnoremap tn :tabnew<CR>
+
 
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann
@@ -90,16 +99,6 @@ set showmatch
 " How many tenths of a second to blink when matching brackets
 set mat=2
 
-
-
-"Credit joshdick
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-if (has("nvim"))
-    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-    " let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
 "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
 "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
 " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
@@ -110,63 +109,66 @@ endif
 call plug#begin('~/.local/share/nvim/plugged')
 
 " Language
-" Plug 'roxma/nvim-completion-manager'
-" Plug 'roxma/nvim-cm-tern',  {'do': 'npm install'}
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-tern'
 Plug 'jason0x43/vim-js-indent'
 Plug 'cakebaker/scss-syntax.vim'
 Plug 'herringtondarkholme/yats.vim'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 Plug 'pangloss/vim-javascript'
 Plug 'Quramy/vim-js-pretty-template'
-Plug 'jason0x43/vim-tss', { 'for': [ 'typescript', 'javascript' ], 'do': 'npm install'}
 Plug 'mhartington/nvim-typescript'
-Plug 'neomake/neomake'
 Plug 'jiangmiao/auto-pairs'
-" Plug 'edkolev/tmuxline.vim'
-Plug 'palantir/tslint'
-Plug 'valloric/matchtagalways'
-" Plug 'quramy/tsuquyomi'
 Plug 'alvan/vim-closetag'
 Plug 'airblade/vim-gitgutter'
 Plug 'chiel92/vim-autoformat'
+" Plug 'palantir/tslint'
+" Plug 'neomake/neomake'
+" Plug 'valloric/matchtagalways'
+" Plug 'jason0x43/vim-tss', { 'for': [ 'typescript', 'javascript' ], 'do': 'npm install'}
 " Plug 'w0rp/ale'
 
 " VIM
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-surround'
 Plug 'junegunn/vim-easy-align'
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
 
 " ETC
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/seoul256.vim'
 Plug 'editorconfig/editorconfig-vim'
 
 " Theme
-Plug 'rakr/vim-one'
-Plug 'flazz/vim-colorschemes'
-Plug 'reedes/vim-colors-pencil'
-Plug 'liuchengxu/space-vim-dark'
-Plug 'zanglg/nova.vim'
-Plug 'ayu-theme/ayu-vim'
-Plug 'ayu-theme/ayu-vim-airline'
-Plug 'nightsense/seabird'
+Plug 'agude/vim-eldar'
 Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'notpratheek/vim-luna'
-Plug 'lifepillar/vim-wwdc17-theme'
-Plug 'roosta/vim-srcery'
-Plug 'lu-ren/SerialExperimentsLain'
+" Plug 'rakr/vim-one'
+" Plug 'junegunn/seoul256.vim'
+" Plug 'flazz/vim-colorschemes'
+" Plug 'reedes/vim-colors-pencil'
+" Plug 'liuchengxu/space-vim-dark'
+" Plug 'zanglg/nova.vim'
+" Plug 'ayu-theme/ayu-vim'
+" Plug 'ayu-theme/ayu-vim-airline'
+" Plug 'nightsense/seabird'
+" Plug 'vim-airline/vim-airline-themes'
+" Plug 'NLKNguyen/papercolor-theme'
+" Plug 'notpratheek/vim-luna'
+" Plug 'lifepillar/vim-wwdc17-theme'
+" Plug 'roosta/vim-srcery'
+" Plug 'lu-ren/SerialExperimentsLain'
 
 call plug#end()
 
 " Auto Format
 noremap <leader>l :Autoformat<CR>
+let g:formatdef_custom_tsfmt = "'tsfmt --useTsfmt ~/.config/vim_plugin/tsfmt.json --stdin '.bufname('%')"
 
 " Easy Align
 nmap ga <Plug>(EasyAlign)
@@ -192,7 +194,7 @@ let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 command! -bang -nargs=* Ag
             \ call fzf#vim#ag(<q-args>,
             \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-            \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+            \                         : fzf#vim#with_preview('right:50%:hidden', '`'),
             \                 <bang>0)
 
 " Command for git grep
@@ -220,24 +222,8 @@ let g:fzf_colors =
             \ 'spinner': ['fg', 'Label'],
             \ 'header':  ['fg', 'Comment'] }
 
-" Neomake
-autocmd! BufWritePost * Neomake
-let g:neomake_open_list = 2
-
 " vim-js-indent
-let js_indent_typescript = 0
-
-" NVIM Typescript
-map <leader>i :TSImport<cr>
-map <leader>k :TSDefPreview<cr>
-
-" Tsuquyomi
-" map <leader>i :TsuImport<cr>
-" let g:tsuquyomi_shortest_import_path = 1
-
-" Typescript-vim
-" autocmd QuickFixCmdPost [^l]* nested cwindow
-" autocmd QuickFixCmdPost    l* nested lwindow
+let js_indent_typescript = 1
 
 " Airline
 let g:airline_powerline_fonts = 1
@@ -248,22 +234,9 @@ let g:ale_linters = {
     \}
 let g:airline#extensions#ale#enabled = 1
 
-" vim-tss
-let g:tss_auto_open_loclist = 1
-let g:tss_completion_ignore_case = 1
-
-" Deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_profile = 1
-let g:deoplete#enable_debug = 1
-let deoplete#tag#cache_limit_size = 5000000
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-autocmd CompleteDone * silent! pclose!
-
 " NERDTree
-" autocmd vimenter * NERDTree
-let NERDTreeShowHidden=1
-let g:NERDTreeWinPos = "right"
+let NERDTreeShowHidden = 1
+let g:NERDTreeWinSize = 50
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 map <leader>n :NERDTreeToggle<cr>
 map <leader>r :NERDTreeFind<cr>
@@ -272,15 +245,56 @@ map <leader>r :NERDTreeFind<cr>
 let g:NERDSpaceDelims = 1
 
 " NVM Completion Manager
-let g:cm_matcher = {'module': 'cm_matchers.prefix_matcher', 'case': 'icase'}
-let g:cm_refresh_legnth = 3
+autocmd BufEnter * call ncm2#enable_for_buffer()
+
+" Eldar
+colo eldar
+
+" LanguageClient
+let g:LanguageClient_serverCommands = {
+    \ 'typescript': ['typescript-language-server', '--stdio'],
+    \ }
+let g:LanguageClient_diagnosticsDisplay = {
+    \     1: {
+    \         "name": "Error",
+    \         "texthl": "ErrorMsg",
+    \         "signText": "✖",
+    \         "signTexthl": "ErrorMsg",
+    \     },
+    \     2: {
+    \         "name": "Warning",
+    \         "texthl": "WarningMsg",
+    \         "signText": "⚠",
+    \         "signTexthl": "WarningMsg",
+    \     },
+    \     3: {
+    \         "name": "Information",
+    \         "texthl": "ALEInfo",
+    \         "signText": "ℹ",
+    \         "signTexthl": "ALEInfoSign",
+    \     },
+    \     4: {
+    \         "name": "Hint",
+    \         "texthl": "ALEInfo",
+    \         "signText": "➤",
+    \         "signTexthl": "ALEInfoSign",
+    \     },
+    \ }
+nnoremap <silent><leader>; :call LanguageClient#contextMenu()<CR>
+nnoremap <silent><leader>i :call LanguageClient#textDocument_codeAction()<CR>
+nnoremap <silent><leader>g :call LanguageClient#textDocument_definition({'gotoCmd: 'split})<CR>
+nnoremap <silent><leader>G :call LanguageClient#textDocument_definition()<CR>
+nnoremap <silent><leader>k :call LanguageClient#textDocument_references()<CR>
+nnoremap <silent><leader>m :call LanguageClient#textDocument_rename()<CR>
+nnoremap <silent><leader>l :call LanguageClient#textDocument_formatting()<CR>
+nnoremap <silent><leader>p :call LanguageClient#textDocument_hover()<CR>
 
 " Seoul256
-let g:airline_theme='seoul256'
-let g:seoul256_background = 238
-let g:seoul256_light_background = 252
+" let g:airline_theme='seoul256'
+" let g:seoul256_background = 238
+" let g:seoul256_light_background = 252
 " colo seoul256
-colo seoul256-light
+" colo seoul256-light
 
 " Luna
 " let g:airline_theme='luna'
@@ -325,7 +339,6 @@ colo seoul256-light
 " colorscheme ayu
 
 " Pencil
-let g:airline_theme='pencil'
 " let g:pencil_higher_contrast_ui = 1   " 0=low (def), 1=high
 " let g:pencil_neutral_code_bg = 0   " 0=gray (def), 1=normal
 " let g:pencil_gutter_color = 1
