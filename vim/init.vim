@@ -4,9 +4,9 @@ set expandtab
 set smarttab " Be smart when using tabs ;)
 set shiftwidth=2
 set tabstop=2
-set ai  " Auto Indent
-set si  " Smart Indent
-set wrap "Wrap lines
+set ai   " Auto Indent
+set si   " Smart Indent
+set wrap " Wrap lines
 hi link ALEErrorSign    Error
 hi link ALEWarningSign  Warning
 
@@ -32,14 +32,12 @@ nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
 
 " Quickfix
-nnoremap cj :cn<CR>
-nnoremap ck :cp<CR>
+nnoremap <leader>; :ll<CR>
 
 " Tab
 nnoremap tl :tabnext<CR>
 nnoremap th :tabprev<CR>
 nnoremap tn :tabnew<CR>
-
 
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann
@@ -96,6 +94,7 @@ set magic
 
 " Show matching brackets when text indicator is over them
 set showmatch
+
 " How many tenths of a second to blink when matching brackets
 set mat=2
 
@@ -122,7 +121,7 @@ Plug 'cakebaker/scss-syntax.vim'
 Plug 'herringtondarkholme/yats.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'Quramy/vim-js-pretty-template'
-Plug 'mhartington/nvim-typescript'
+Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 Plug 'jiangmiao/auto-pairs'
 Plug 'alvan/vim-closetag'
 Plug 'airblade/vim-gitgutter'
@@ -166,9 +165,9 @@ Plug 'vim-airline/vim-airline'
 
 call plug#end()
 
-" Auto Format
-noremap <leader>l :Autoformat<CR>
-let g:formatdef_custom_tsfmt = "'tsfmt --useTsfmt ~/.config/vim_plugin/tsfmt.json --stdin '.bufname('%')"
+" NCM2
+au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
+au User Ncm2PopupClose set completeopt=menuone 
 
 " Easy Align
 nmap ga <Plug>(EasyAlign)
@@ -228,12 +227,6 @@ let js_indent_typescript = 1
 " Airline
 let g:airline_powerline_fonts = 1
 
-" ALE
-let g:ale_linters = {
-    \    'typescript': ['tsserver'],
-    \}
-let g:airline#extensions#ale#enabled = 1
-
 " NERDTree
 let NERDTreeShowHidden = 1
 let g:NERDTreeWinSize = 50
@@ -251,8 +244,16 @@ autocmd BufEnter * call ncm2#enable_for_buffer()
 colo eldar
 
 " LanguageClient
+"
+augroup LanguageClient_config
+  autocmd!
+  " Discard all errors in the QuickFix window if the language server stops or crashes
+  autocmd User LanguageClientStopped call setqflist([])
+augroup end
+
 let g:LanguageClient_serverCommands = {
     \ 'typescript': ['typescript-language-server', '--stdio'],
+    \ 'html': ['html-languageserver', '--stdio'],
     \ }
 let g:LanguageClient_diagnosticsDisplay = {
     \     1: {
@@ -264,30 +265,37 @@ let g:LanguageClient_diagnosticsDisplay = {
     \     2: {
     \         "name": "Warning",
     \         "texthl": "WarningMsg",
-    \         "signText": "⚠",
+    \         "signText": "?",
     \         "signTexthl": "WarningMsg",
     \     },
     \     3: {
     \         "name": "Information",
     \         "texthl": "ALEInfo",
-    \         "signText": "ℹ",
+    \         "signText": "i",
     \         "signTexthl": "ALEInfoSign",
     \     },
     \     4: {
     \         "name": "Hint",
     \         "texthl": "ALEInfo",
-    \         "signText": "➤",
+    \         "signText": ">",
     \         "signTexthl": "ALEInfoSign",
     \     },
     \ }
-nnoremap <silent><leader>; :call LanguageClient#contextMenu()<CR>
+let g:LanguageClient_hoverPreview = "Always"
+let g:LanguageClient_changeThrottle = 0.5
 nnoremap <silent><leader>i :call LanguageClient#textDocument_codeAction()<CR>
-nnoremap <silent><leader>g :call LanguageClient#textDocument_definition({'gotoCmd: 'split})<CR>
+nnoremap <silent><leader>g :call LanguageClient#textDocument_definition({'gotoCmd': 'split'})<CR>
 nnoremap <silent><leader>G :call LanguageClient#textDocument_definition()<CR>
 nnoremap <silent><leader>k :call LanguageClient#textDocument_references()<CR>
 nnoremap <silent><leader>m :call LanguageClient#textDocument_rename()<CR>
 nnoremap <silent><leader>l :call LanguageClient#textDocument_formatting()<CR>
 nnoremap <silent><leader>p :call LanguageClient#textDocument_hover()<CR>
+
+" Auto Format
+let g:formatdef_custom_html = '"js-beautify --html -A force-aligned -s 2"'
+let g:formatters_html = ['custom_html']
+autocmd FileType html nnoremap<buffer> <leader>l :Autoformat<CR>
+"let g:formatdef_custom_tsfmt = \"'tsfmt --useTsfmt ~/.config/vim_plugin/tsfmt.json --stdin '.bufname('%')"
 
 " Seoul256
 " let g:airline_theme='seoul256'
@@ -343,6 +351,4 @@ nnoremap <silent><leader>p :call LanguageClient#textDocument_hover()<CR>
 " let g:pencil_neutral_code_bg = 0   " 0=gray (def), 1=normal
 " let g:pencil_gutter_color = 1
 " colo pencil
-
-
 
