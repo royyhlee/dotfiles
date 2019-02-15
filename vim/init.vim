@@ -35,7 +35,7 @@ nnoremap <silent> <leader><cr> :nohlsearch<cr>
 nnoremap ]g gt
 nnoremap [g gT
 
-colo peachpuff
+colo eldar
 
 call plug#begin()
 
@@ -45,6 +45,9 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'airblade/vim-gitgutter'
+Plug 'agude/vim-eldar'
+Plug 'junegunn/vim-easy-align'
+Plug 'jiangmiao/auto-pairs'
 
 " Autoformat ==================================================================
 Plug 'chiel92/vim-autoformat'
