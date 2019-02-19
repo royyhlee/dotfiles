@@ -1,5 +1,5 @@
 set number
-set tw=100
+set tw=79
 set hidden
 set tabstop=2
 set shiftwidth=2
@@ -14,13 +14,15 @@ set showmatch
 filetype plugin on
 filetype indent on
 
-let mapleader = " "
+let mapleader = "\<space>"
+
 inoremap jk <esc>
 
 nnoremap <leader>w :wa<cr>
+nnoremap <leader>W :w<cr>
 nnoremap <leader>z :bd<cr>
 nnoremap <leader>q :q<cr>
-nnoremap <leader>r :E<cr>
+nnoremap <leader>r :Explore<cr>
 nnoremap <leader>R :Ve<cr>
 
 " Scroll
@@ -35,8 +37,6 @@ nnoremap <silent> <leader><cr> :nohlsearch<cr>
 nnoremap ]g gt
 nnoremap [g gT
 
-colo eldar
-
 call plug#begin()
 
 Plug 'tpope/vim-surround'
@@ -45,9 +45,15 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'agude/vim-eldar'
-Plug 'junegunn/vim-easy-align'
+Plug 'alvan/vim-closetag'
 Plug 'jiangmiao/auto-pairs'
+Plug 'agude/vim-eldar'
+Plug 'itchyny/lightline.vim'
+
+" Easy Align ==================================================================
+Plug 'junegunn/vim-easy-align'
+nmap ga <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
 
 " Autoformat ==================================================================
 Plug 'chiel92/vim-autoformat'
@@ -62,13 +68,14 @@ let g:deoplete#enable_at_startup = 1
 " FZF =========================================================================
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 command! -bang -nargs=* Ag
-            \ call fzf#vim#ag(<q-args>,
-            \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-            \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-            \                 <bang>0)
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%'),
+  \                 <bang>0)
 nnoremap <leader>e :Buffers<cr>
-nnoremap <leader>o :GFiles<cr>
+nnoremap <leader>o :FZF<cr>
 nnoremap <leader>f :Ag<cr>
 
 " Language Client =============================================================
@@ -90,13 +97,14 @@ nnoremap <leader>m :call LanguageClient#textDocument_rename()<CR>
 
 call plug#end()
 
+colo eldar 
+
 " Highlight
-hi LineNr          ctermfg=grey
 hi GitGutterAdd    ctermfg=green
 hi GitGutterChange ctermfg=yellow
 hi GitGutterDelete ctermfg=red
 hi ALEErrorSign    ctermfg=red
-hi ALEError        cterm=undercurl guisp=red 
+hi ALEError        cterm=undercurl guisp=red
 hi ALEInfoSign     ctermfg=yellow
 
 
