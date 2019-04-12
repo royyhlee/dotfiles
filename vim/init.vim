@@ -22,8 +22,8 @@ nnoremap <leader>w :wa<cr>
 nnoremap <leader>W :w<cr>
 nnoremap <leader>z :bd<cr>
 nnoremap <leader>q :q<cr>
-nnoremap <leader>r :Explore<cr>
-nnoremap <leader>R :Ve<cr>
+nnoremap <leader>r :NERDTreeFind<cr>
+nnoremap <leader>R :NERDTreeToggle<cr>
 
 " Scroll
 nnoremap <C-e> 3<C-e>
@@ -44,27 +44,21 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'HerringtonDarkholme/yats.vim'
-Plug 'airblade/vim-gitgutter'
 Plug 'alvan/vim-closetag'
 Plug 'jiangmiao/auto-pairs'
 Plug 'agude/vim-eldar'
 Plug 'itchyny/lightline.vim'
+Plug 'airblade/vim-gitgutter'
+
+" NERD Tree ===================================================================
+Plug 'scrooloose/nerdtree'
+let g:NERDTreeQuitOnOpen = 1
+let g:NERDTreeWinSize = 80
 
 " Easy Align ==================================================================
 Plug 'junegunn/vim-easy-align'
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
-
-" Autoformat ==================================================================
-Plug 'chiel92/vim-autoformat'
-let g:formatdef_custom_html = '"js-beautify --html -A force-aligned -s 2"'
-let g:formatters_html = ['custom_html']
-autocmd FileType html,scss nnoremap<buffer> <leader>l :Autoformat<CR>
-
-" Deoplete ====================================================================
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-let g:deoplete#enable_at_startup = 1
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " FZF =========================================================================
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -73,29 +67,26 @@ let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>,
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%'),
+  \                         : fzf#vim#with_preview('right:50%', '?'),
   \                 <bang>0)
 nnoremap <leader>e :Buffers<cr>
 nnoremap <leader>o :FZF<cr>
 nnoremap <leader>f :Ag<cr>
 
-" Language Client =============================================================
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-let g:LanguageClient_hoverPreview = "Always"
-let g:LanguageClient_serverCommands = {
-    \ 'typescript': ['typescript-language-server', '--stdio'],
-    \ 'html': ['html-languageserver', '--stdio'],
-    \ 'scss': ['css-languageserver', '--stdio'],
-    \ }
-nnoremap <leader>i :call LanguageClient#textDocument_codeAction()<cr>
-nnoremap <leader>l :call LanguageClient#textDocument_formatting()<cr>
-nnoremap <leader>g :call LanguageClient#textDocument_definition()<cr>
-nnoremap <leader>p :call LanguageClient#textDocument_hover()<cr>
-nnoremap <leader>k :call LanguageClient#textDocument_references()<CR>
-nnoremap <leader>m :call LanguageClient#textDocument_rename()<CR>
+" Conquer of Completion =======================================================
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+
+nmap <leader>i <Plug>(coc-codeaction)
+nnoremap <leader>l :call CocAction('format')<cr>
+nnoremap <leader>g :call CocAction('jumpDefinition')<cr>
+nnoremap <leader>p :call CocAction('doHover')<cr>
+nnoremap <leader>k :call CocAction('jumpReferences')<cr>
+nnoremap <leader>m :call CocAction('rename')<cr>
+
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
 call plug#end()
 
@@ -105,8 +96,8 @@ colo eldar
 hi GitGutterAdd    ctermfg=green
 hi GitGutterChange ctermfg=yellow
 hi GitGutterDelete ctermfg=red
-hi ALEErrorSign    ctermfg=red
-hi ALEError        cterm=undercurl guisp=red
-hi ALEInfoSign     ctermfg=yellow
+" hi ALEErrorSign    ctermfg=red
+" hi ALEError        cterm=undercurl guisp=red
+" hi ALEInfoSign     ctermfg=yellow
 
 
