@@ -23,7 +23,7 @@ nnoremap <leader>W :w<cr>
 nnoremap <leader>z :bd<cr>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>r :NERDTreeFind<cr>
-nnoremap <leader>R :NERDTreeToggle<cr>
+nnoremap <leader>n :NERDTreeToggle<cr>
 
 " Scroll
 nnoremap <C-e> 3<C-e>
@@ -41,6 +41,7 @@ call plug#begin()
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
+Plug 'posva/vim-vue'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'HerringtonDarkholme/yats.vim'
@@ -49,20 +50,24 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'agude/vim-eldar'
 Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
+Plug 'scrooloose/nerdtree'
+Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'neoclide/coc.nvim', { 'tag': '*', 'do': './install.sh' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
+call plug#end()
 
 " NERD Tree ===================================================================
-Plug 'scrooloose/nerdtree'
 let g:NERDTreeQuitOnOpen = 1
 let g:NERDTreeWinSize = 80
 
 " Easy Align ==================================================================
-Plug 'junegunn/vim-easy-align'
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
 " FZF =========================================================================
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
 let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>,
@@ -74,11 +79,9 @@ nnoremap <leader>o :FZF<cr>
 nnoremap <leader>f :Ag<cr>
 
 " Conquer of Completion =======================================================
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
-
 nmap <leader>i <Plug>(coc-codeaction)
 nnoremap <leader>l :call CocAction('format')<cr>
-nnoremap <leader>g :call CocAction('jumpDefinition')<cr>
+nnoremap <leader>h :call CocAction('jumpDefinition')<cr>
 nnoremap <leader>p :call CocAction('doHover')<cr>
 nnoremap <leader>k :call CocAction('jumpReferences')<cr>
 nnoremap <leader>m :call CocAction('rename')<cr>
@@ -88,11 +91,13 @@ nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<CR>"
 
-call plug#end()
+" Go =======================================================
+nnoremap <leader>1 :GoRun<cr>
+nnoremap <leader>2 :GoBuild<cr>
 
+" Theme & Highlight ===========================================================
 colo eldar 
 
-" Highlight
 hi GitGutterAdd    ctermfg=green
 hi GitGutterChange ctermfg=yellow
 hi GitGutterDelete ctermfg=red
