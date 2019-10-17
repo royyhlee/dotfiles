@@ -10,29 +10,29 @@ Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'ajmwagar/vim-deus'
 Plug 'flrnprz/candid.vim'
 Plug 'agude/vim-eldar'
-Plug 'scrooloose/nerdcommenter'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
-" Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-commentary'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'alvan/vim-closetag'
 Plug 'jiangmiao/auto-pairs'
 Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'justinmk/vim-dirvish'
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'qpkorr/vim-bufkill'
+Plug 'jeetsukumaran/vim-filebeagle'
+" Plug 'justinmk/vim-dirvish'
 call plug#end()
 
 " Color Scheme =================================================================
 
 " if has("termguicolors") 
-"   set termguicolors
+  " set termguicolors
 " endif
 
 colo eldar
@@ -66,9 +66,11 @@ inoremap jk <esc>
 nnoremap <leader>q :q<cr>
 nnoremap <leader>w :wa<cr>
 nnoremap <leader>W :w<cr>
-nnoremap <leader>z :BD<cr>
+nnoremap <leader>d :BD<cr>
+nnoremap <leader>D :bd<cr>
 nnoremap <leader>E :e!<cr>
-nnoremap <leader>n :Dirvish<cr>
+nnoremap <leader>n :FileBeagle<cr>
+nnoremap <leader>s :set spell! spelllang=en_us<cr>
 
 nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
@@ -81,15 +83,17 @@ nnoremap <silent> <leader><cr> :nohlsearch<cr>
 nnoremap ]g gt
 nnoremap [g gT
 
-" Nerd Commenter
-let g:NERDSpaceDelims = 1
+" FileBeagle ===================================================================
+let g:filebeagle_suppress_keymaps = 1
+map <silent> <Leader>f :Ag<cr>
+map <silent> -         <Plug>FileBeagleOpenCurrentBufferDir
 
 " Exit Terminal
 tnoremap <Esc> <C-\><C-n>:q!<CR>
 
 " Fugitive =====================================================================
-nnoremap <leader>gb :Gblame<cr>
-nnoremap <leader>gs :Gstatus<cr>
+nnoremap <leader>gb :Git blame<cr>
+nnoremap <leader>gs :G<cr>
 nnoremap <leader>gw :Gwrite<cr>
 
 " Easy Align ===================================================================
@@ -101,11 +105,11 @@ let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>,
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%', '?'),
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
   \                 <bang>0)
 nnoremap <leader>e :Buffers<cr>
 nnoremap <leader>o :FZF<cr>
-nnoremap <leader>f :Ag<cr>
+" nnoremap <leader>f :Ag<cr>
 
 " Conquer of Completion ========================================================
 let g:coc_node_path="/home/royyhlee/.nvm/versions/node/v10.16.2/bin/node"
