@@ -1,16 +1,7 @@
 " Plugins ======================================================================
 call plug#begin()
 
-" Theme
-Plug 'noahfrederick/vim-hemisu'
-Plug 'junegunn/seoul256.vim'
-Plug 'tpope/vim-vividchalk'
-Plug 'noahfrederick/vim-noctu'
-Plug 'jeffkreeftmeijer/vim-dim'
-Plug 'ajmwagar/vim-deus'
-Plug 'flrnprz/candid.vim'
-Plug 'agude/vim-eldar'
-
+" Plugins
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
@@ -24,22 +15,51 @@ Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'qpkorr/vim-bufkill'
 Plug 'jeetsukumaran/vim-filebeagle'
-" Plug 'justinmk/vim-dirvish'
+
+" Theme
+Plug 'junegunn/seoul256.vim'
+Plug 'ajmwagar/vim-deus'
+Plug 'flrnprz/candid.vim'
+Plug 'agude/vim-eldar'
+Plug 'morhetz/gruvbox'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'lifepillar/vim-solarized8'
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+
 call plug#end()
 
 " Color Scheme =================================================================
 
-" if has("termguicolors") 
-  " set termguicolors
-" endif
+if has("termguicolors") 
+  set termguicolors
+endif
 
-colo eldar
+" set background=light
+" colo solarized8
 
-hi GitGutterAdd    guifg=green  ctermfg=green
-hi GitGutterChange guifg=yellow ctermfg=yellow
-hi GitGutterDelete guifg=red    ctermfg=red
+"""""" Challenger Deep
+let g:lightline = { 'colorscheme': 'challenger_deep' }
+colo challenger_deep
+
+
+"""""" Gruvbox
+" let g:gruvbox_contrast_dark='soft'
+" let g:gruvbox_sign_column='bg0'
+" let g:lightline = {
+"       \ 'colorscheme': 'gruvbox'
+"       \ }
+" set background=light
+" colo gruvbox
+
+" let g:seoul256_background = 236
+" set background=dark
+" colo seoul256
+
+" hi GitGutterChange guifg=yellow ctermfg=yellow
+" hi GitGutterAdd    guifg=#00fb00  
+" hi GitGutterDelete guifg=red    ctermfg=red
+" ctermfg=#00fb00
 
 " General ======================================================================
 set number
@@ -63,12 +83,16 @@ let mapleader = "\<space>"
 
 inoremap jk <esc>
 
+cnoremap <C-a> <Home>
+cnoremap <C-b> <Left>
+cnoremap <C-f> <Right>
+
 nnoremap <leader>q :q<cr>
 nnoremap <leader>w :wa<cr>
 nnoremap <leader>W :w<cr>
 nnoremap <leader>d :BD<cr>
 nnoremap <leader>D :bd<cr>
-nnoremap <leader>E :e!<cr>
+nnoremap <leader>r :e!<cr>
 nnoremap <leader>n :FileBeagle<cr>
 nnoremap <leader>s :set spell! spelllang=en_us<cr>
 
@@ -85,7 +109,6 @@ nnoremap [g gT
 
 " FileBeagle ===================================================================
 let g:filebeagle_suppress_keymaps = 1
-map <silent> <Leader>f :Ag<cr>
 map <silent> -         <Plug>FileBeagleOpenCurrentBufferDir
 
 " Exit Terminal
@@ -102,6 +125,26 @@ xmap ga <Plug>(EasyAlign)
 
 " FZF ==========================================================================
 let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+
+function! s:format_buffer(b)
+  let l:name = bufname(a:b)
+  return printf("%s\t%s", a:b, empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:."))
+endfunction
+
+command! BD call fzf#run(fzf#wrap({
+      \ 'source': map(
+      \   filter(
+      \     range(
+      \       1,
+      \       bufnr('$')
+      \     ),
+      \     {_, nr -> buflisted(nr) && getbufvar(nr, "&filetype") != "qf" && !getbufvar(nr, "&modified")}
+      \   ),
+      \   {_, nr -> s:format_buffer(nr)}
+      \ ),
+      \ 'sink*': { lines -> execute('bwipeout '.join(map(lines, {_, line -> split(line)[0]}))) },
+      \ 'options': '--multi -d \t --bind ctrl-a:select-all+accept'
+      \ }))
 command! -bang -nargs=* Ag
   \ call fzf#vim#ag(<q-args>,
   \                 <bang>0 ? fzf#vim#with_preview('up:60%')
@@ -109,10 +152,9 @@ command! -bang -nargs=* Ag
   \                 <bang>0)
 nnoremap <leader>e :Buffers<cr>
 nnoremap <leader>o :FZF<cr>
-" nnoremap <leader>f :Ag<cr>
+nnoremap <silent> <Leader>f :Ag<cr>
 
 " Conquer of Completion ========================================================
-let g:coc_node_path="/home/royyhlee/.nvm/versions/node/v10.16.2/bin/node"
 set updatetime=300
 set cmdheight=2
 nmap     <silent> <leader>i <Plug>(coc-codeaction)
