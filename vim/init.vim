@@ -25,41 +25,45 @@ Plug 'agude/vim-eldar'
 Plug 'morhetz/gruvbox'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'lifepillar/vim-solarized8'
+Plug 'arzg/vim-colors-xcode'
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 
 call plug#end()
 
 " Color Scheme =================================================================
 
-if has("termguicolors") 
-  set termguicolors
-endif
+" if has("termguicolors") 
+"   set termguicolors
+" endif
 
-" set background=light
-" colo solarized8
+colo eldar
+
+"""""" Deus
+" colo deus
 
 """""" Challenger Deep
-let g:lightline = { 'colorscheme': 'challenger_deep' }
-colo challenger_deep
+" let g:lightline = { 'colorscheme': 'challenger_deep' }
+" colo challenger_deep
 
+"""""" XCODE
+" colo xcodelight
 
 """""" Gruvbox
-" let g:gruvbox_contrast_dark='soft'
 " let g:gruvbox_sign_column='bg0'
-" let g:lightline = {
-"       \ 'colorscheme': 'gruvbox'
-"       \ }
-" set background=light
+" let g:lightline = { 'colorscheme': 'gruvbox' }
+" set background=dark
 " colo gruvbox
 
-" let g:seoul256_background = 236
-" set background=dark
+"""""" Seoul256
+" let g:lightline = { 'colorscheme': 'seoul256' }
 " colo seoul256
+" set background=light
 
-" hi GitGutterChange guifg=yellow ctermfg=yellow
-" hi GitGutterAdd    guifg=#00fb00  
-" hi GitGutterDelete guifg=red    ctermfg=red
-" ctermfg=#00fb00
+hi DiffChange guifg=yellow  ctermfg=yellow
+" hi DiffAdd    guifg=#00fb00 
+hi DiffDelete guifg=red     ctermfg=red
+" hi SignColumn guibg=#E1E1E1
+" " ctermfg=#00fb00
 
 " General ======================================================================
 set number
