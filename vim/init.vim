@@ -1,354 +1,288 @@
-" Settings
-set history=500
-set expandtab
-set smarttab " Be smart when using tabs ;)
-set shiftwidth=2
-set tabstop=2
-set ai   " Auto Indent
-set si   " Smart Indent
-set wrap " Wrap lines
-hi link ALEErrorSign    Error
-hi link ALEWarningSign  Warning
+" Plugins ======================================================================
+call plug#begin()
 
-" Key map
-let mapleader="\<Space>"
-inoremap jk <esc>
-map <silent> <leader><cr> :noh<cr>
-map <leader>w :wa<cr>
-map <leader>q :q<cr>
-map <leader>Q :qa<cr>
+" Plugins
+" Plug 'mhartington/formatter.nvim'
+" Plug 'sbdchd/neoformat'
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'ggandor/lightspeed.nvim', { 'branch': 'main' }
+Plug 'neovim/nvim-lspconfig'
+Plug 'nathom/filetype.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'folke/trouble.nvim'
 
-" Tab Select
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/nvim-cmp'
 
-" Split Movement
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+" For vsnip users.
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
 
-" Scroll
-nnoremap <C-e> 3<C-e>
-nnoremap <C-y> 3<C-y>
+" Plug 'nvim-lua/plenary.nvim'
+" Plug 'nvim-telescope/telescope.nvim'
 
-" Quickfix
-nnoremap <leader>; :ll<CR>
-
-" Tab
-nnoremap tl :tabnext<CR>
-nnoremap th :tabprev<CR>
-nnoremap tn :tabnew<CR>
-
-" Visual mode pressing * or # searches for the current selection
-" Super useful! From an idea by Michael Naumann
-vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
-vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
-
-function! VisualSelection(direction, extra_filter) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
-
-    let l:pattern = escape(@", "\\/.*'$^~[]")
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-
-    if a:direction == 'gv'
-        call CmdLine("Ack '" . l:pattern . "' " )
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
-    endif
-
-    let @/ = l:pattern
-    let @" = l:saved_reg
-endfunction
-
-" Enable syntax highlighting
-syntax enable
-
-" Editor line number
-set number
-
-" Enable filetype plugins
-filetype plugin on
-filetype indent on
-
-" Set to auto read when a file is changed from the outside
-set autoread
-
-" Ignore case when searching
-set ignorecase
-
-" When searching try to be smart about cases
-set smartcase
-
-" Highlight search results
-set hlsearch
-
-" Makes search act like search in modern browsers
-set incsearch
-
-" Don't redraw while executing macros (good performance config)
-set lazyredraw
-
-" For regular expressions turn magic on
-set magic
-
-" Show matching brackets when text indicator is over them
-set showmatch
-
-" How many tenths of a second to blink when matching brackets
-set mat=2
-
-"For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-"Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-" < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-if (has("termguicolors"))
-    set termguicolors
-endif
-
-call plug#begin('~/.local/share/nvim/plugged')
-
-" Language
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-tern'
-Plug 'jason0x43/vim-js-indent'
-Plug 'cakebaker/scss-syntax.vim'
-Plug 'herringtondarkholme/yats.vim'
-Plug 'pangloss/vim-javascript'
-Plug 'Quramy/vim-js-pretty-template'
-Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
-Plug 'jiangmiao/auto-pairs'
-Plug 'alvan/vim-closetag'
-Plug 'airblade/vim-gitgutter'
-Plug 'chiel92/vim-autoformat'
-" Plug 'palantir/tslint'
-" Plug 'neomake/neomake'
-" Plug 'valloric/matchtagalways'
-" Plug 'jason0x43/vim-tss', { 'for': [ 'typescript', 'javascript' ], 'do': 'npm install'}
-" Plug 'w0rp/ale'
-
-" VIM
-Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-commentary'
+Plug 'leafgarland/typescript-vim'
+Plug 'alvan/vim-closetag'
+Plug 'jiangmiao/auto-pairs'
+Plug 'itchyny/lightline.vim'
+Plug 'airblade/vim-gitgutter'
 Plug 'junegunn/vim-easy-align'
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
-
-" ETC
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'editorconfig/editorconfig-vim'
+Plug 'jeetsukumaran/vim-filebeagle'
 
 " Theme
-Plug 'agude/vim-eldar'
-Plug 'vim-airline/vim-airline'
-" Plug 'rakr/vim-one'
 " Plug 'junegunn/seoul256.vim'
-" Plug 'flazz/vim-colorschemes'
-" Plug 'reedes/vim-colors-pencil'
-" Plug 'liuchengxu/space-vim-dark'
-" Plug 'zanglg/nova.vim'
-" Plug 'ayu-theme/ayu-vim'
-" Plug 'ayu-theme/ayu-vim-airline'
-" Plug 'nightsense/seabird'
-" Plug 'vim-airline/vim-airline-themes'
+" Plug 'ajmwagar/vim-deus'
+" Plug 'flrnprz/candid.vim'
+" Plug 'agude/vim-eldar'
+" Plug 'morhetz/gruvbox'
 " Plug 'NLKNguyen/papercolor-theme'
-" Plug 'notpratheek/vim-luna'
-" Plug 'lifepillar/vim-wwdc17-theme'
-" Plug 'roosta/vim-srcery'
-" Plug 'lu-ren/SerialExperimentsLain'
+" Plug 'lifepillar/vim-solarized8'
+" Plug 'arzg/vim-colors-xcode'
+" Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'relastle/bluewery.vim'
 
 call plug#end()
 
-" NCM2
-au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
-au User Ncm2PopupClose set completeopt=menuone 
+" LSP Config
 
-" Easy Align
+set completeopt=menu,menuone,noselect
+
+lua << EOF
+require("trouble").setup {}
+
+local cmp = require'cmp'
+
+cmp.setup({
+  snippet = {
+    -- REQUIRED - you must specify a snippet engine
+    expand = function(args)
+      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
+    end,
+  },
+  mapping = {
+    ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+    ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+    ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+    ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+    ['<C-e>'] = cmp.mapping({
+      i = cmp.mapping.abort(),
+      c = cmp.mapping.close(),
+    }),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  },
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'vsnip' }, -- For vsnip users.
+    -- { name = 'luasnip' }, -- For luasnip users.
+    -- { name = 'ultisnips' }, -- For ultisnips users.
+    -- { name = 'snippy' }, -- For snippy users.
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+-- vim.api.nvim_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+-- vim.opt.completeopt = {'noinsert', 'menuone', 'noselect'}
+-- vim.api.nvim_command('inoremap <C-j> <C-x><C-o>')
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<space>m', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[c', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']c', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>c', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<space>l', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  buf_set_keymap('n', "<Leader>i", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
+
+end
+
+local nvim_lsp = require('lspconfig')
+local servers = { 'jsonls', 'cssls', 'tsserver', 'html', 'angularls' }
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup{    
+    on_attach = on_attach,
+    capabilities = capabilities
+  }
+end
+
+EOF
+
+" Color Scheme =================================================================
+
+if has("termguicolors") 
+  set termguicolors
+endif
+
+" colo eldar
+
+" colo bluewery
+" let g:lightline = { 'colorscheme': 'bluewery' }
+
+" colo bluewery-light
+" let g:lightline = { 'colorscheme': 'bluewery_light' }
+
+"""""" tokyonight
+let g:tokyonight_style = "night"
+let g:lightline = {'colorscheme': 'tokyonight'}
+colo tokyonight
+
+"""""" Deus
+" colo deus
+
+"""""" XCODE
+" colo xcodelight
+
+"""""" Gruvbox
+" let g:gruvbox_sign_column='bg0'
+" let g:lightline = { 'colorscheme': 'gruvbox' }
+" set background=dark
+" colo gruvbox
+
+"""""" Seoul256
+" let g:lightline = { 'colorscheme': 'seoul256' }
+" colo seoul256
+" set background=light
+
+" hi guicursor guifg=red ctermfg=red
+
+" hi DiffChange guifg=yellow  ctermfg=yellow
+" hi DiffAdd    guifg=#00fb00 
+" hi DiffDelete guifg=red     ctermfg=red
+" hi SignColumn guibg=#E1E1E1
+" " ctermfg=#00fb00
+
+" General ======================================================================
+set number
+set tw=100
+set cc=+1
+set hidden
+set tabstop=2
+set shiftwidth=2
+set updatetime=100
+set expandtab
+set si
+set ignorecase
+set smartcase
+set lazyredraw
+set showmatch
+
+" set foldmethod=syntax
+" set foldlevelstart=1
+
+" let typescript_fold=1
+
+" filetype plugin on
+" filetype indent on
+
+let mapleader = "\<space>"
+
+inoremap jk <esc>
+
+cnoremap <C-a> <Home>
+cnoremap <C-b> <Left>
+cnoremap <C-f> <Right>
+
+nnoremap <leader>q :q<cr>
+nnoremap <leader>w :wa<cr>
+nnoremap <leader>W :w<cr>
+nnoremap <leader>d :BD<cr>
+nnoremap <leader>D :bd<cr>
+nnoremap <leader>r :e!<cr>
+nnoremap <leader>n :FileBeagle<cr>
+nnoremap <leader>s :set spell! spelllang=en_us<cr>
+
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
+
+nnoremap <silent> <leader>ve :tabnew $MYVIMRC<cr>
+nnoremap <silent> <leader>vs :source $MYVIMRC<cr>
+
+nnoremap <silent> <leader><cr> :nohlsearch<cr>
+
+nnoremap ]g gt
+nnoremap [g gT
+
+" FileBeagle ===================================================================
+let g:filebeagle_suppress_keymaps = 1
+map <silent> -         <Plug>FileBeagleOpenCurrentBufferDir
+
+" Exit Terminal
+tnoremap <Esc> <C-\><C-n>:q!<CR>
+
+" Fugitive =====================================================================
+nnoremap <leader>gb :Git blame<cr>
+nnoremap <leader>gs :G<cr>
+nnoremap <leader>gw :Gwrite<cr>
+
+" Easy Align ===================================================================
 nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
-" FZF
-map <silent> <leader>o :FZF<cr>
-map <silent> <leader>f :Ag<cr>
-map <silent> <leader>F :Ag!<cr>
-
-let g:fzf_command_prefix = 'Fzf'
+" FZF ==========================================================================
 let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 
-" Augmenting Ag command using fzf#vim#with_preview function
-"   * fzf#vim#with_preview([[options], preview window, [toggle keys...]])
-"     * For syntax-highlighting, Ruby and any of the following tools are required:
-"       - Highlight: http://www.andre-simon.de/doku/highlight/en/highlight.php
-"       - CodeRay: http://coderay.rubychan.de/
-"       - Rouge: https://github.com/jneen/rouge
-"
-"   :Ag  - Start fzf with hidden preview window that can be enabled with "?" key
-"   :Ag! - Start fzf in fullscreen and display the preview window above
+function! s:format_buffer(b)
+  let l:name = bufname(a:b)
+  return printf("%s\t%s", a:b, empty(l:name) ? '[No Name]' : fnamemodify(l:name, ":p:~:."))
+endfunction
+
+command! BD call fzf#run(fzf#wrap({
+      \ 'source': map(
+      \   filter(
+      \     range(
+      \       1,
+      \       bufnr('$')
+      \     ),
+      \     {_, nr -> buflisted(nr) && getbufvar(nr, "&filetype") != "qf" && !getbufvar(nr, "&modified")}
+      \   ),
+      \   {_, nr -> s:format_buffer(nr)}
+      \ ),
+      \ 'sink*': { lines -> execute('bwipeout '.join(map(lines, {_, line -> split(line)[0]}))) },
+      \ 'options': '--multi -d \t --bind ctrl-a:select-all+accept'
+      \ }))
 command! -bang -nargs=* Ag
-            \ call fzf#vim#ag(<q-args>,
-            \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-            \                         : fzf#vim#with_preview('right:50%:hidden', '`'),
-            \                 <bang>0)
+  \ call fzf#vim#ag(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
+nnoremap <leader>O :Buffers<cr>
+nnoremap <leader>o :FZF<cr>
+nnoremap <silent> <Leader>f :Ag<cr>
 
-" Command for git grep
-" - fzf#vim#grep(command, with_column, [options], [fullscreen])
-command! -bang -nargs=* GGrep
-            \ call fzf#vim#grep('git grep --line-number '.shellescape(<q-args>), 0, <bang>0)
-
-" Override Colors command. You can safely do this in your .vimrc as fzf.vim
-" will not override existing commands.
-command! -bang Colors
-            \ call fzf#vim#colors({'left': '15%', 'options': '--reverse --margin 30%,0'}, <bang>0)
-
-" Customize fzf colors to match your color scheme
-let g:fzf_colors =
-            \ { 'fg':      ['fg', 'Normal'],
-            \ 'bg':      ['bg', 'Normal'],
-            \ 'hl':      ['fg', 'Comment'],
-            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-            \ 'hl+':     ['fg', 'Statement'],
-            \ 'info':    ['fg', 'PreProc'],
-            \ 'prompt':  ['fg', 'Conditional'],
-            \ 'pointer': ['fg', 'Exception'],
-            \ 'marker':  ['fg', 'Keyword'],
-            \ 'spinner': ['fg', 'Label'],
-            \ 'header':  ['fg', 'Comment'] }
-
-" vim-js-indent
-let js_indent_typescript = 1
-
-" Airline
-let g:airline_powerline_fonts = 1
-
-" NERDTree
-let NERDTreeShowHidden = 1
-let g:NERDTreeWinSize = 50
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-map <leader>n :NERDTreeToggle<cr>
-map <leader>r :NERDTreeFind<cr>
-
-" NERDCommenter
-let g:NERDSpaceDelims = 1
-
-" NVM Completion Manager
-autocmd BufEnter * call ncm2#enable_for_buffer()
-
-" Eldar
-colo eldar
-
-" LanguageClient
-"
-augroup LanguageClient_config
-  autocmd!
-  " Discard all errors in the QuickFix window if the language server stops or crashes
-  autocmd User LanguageClientStopped call setqflist([])
-augroup end
-
-let g:LanguageClient_serverCommands = {
-    \ 'typescript': ['typescript-language-server', '--stdio'],
-    \ 'html': ['html-languageserver', '--stdio'],
-    \ }
-let g:LanguageClient_diagnosticsDisplay = {
-    \     1: {
-    \         "name": "Error",
-    \         "texthl": "ErrorMsg",
-    \         "signText": "✖",
-    \         "signTexthl": "ErrorMsg",
-    \     },
-    \     2: {
-    \         "name": "Warning",
-    \         "texthl": "WarningMsg",
-    \         "signText": "?",
-    \         "signTexthl": "WarningMsg",
-    \     },
-    \     3: {
-    \         "name": "Information",
-    \         "texthl": "ALEInfo",
-    \         "signText": "i",
-    \         "signTexthl": "ALEInfoSign",
-    \     },
-    \     4: {
-    \         "name": "Hint",
-    \         "texthl": "ALEInfo",
-    \         "signText": ">",
-    \         "signTexthl": "ALEInfoSign",
-    \     },
-    \ }
-let g:LanguageClient_hoverPreview = "Always"
-let g:LanguageClient_changeThrottle = 0.5
-nnoremap <silent><leader>i :call LanguageClient#textDocument_codeAction()<CR>
-nnoremap <silent><leader>g :call LanguageClient#textDocument_definition({'gotoCmd': 'split'})<CR>
-nnoremap <silent><leader>G :call LanguageClient#textDocument_definition()<CR>
-nnoremap <silent><leader>k :call LanguageClient#textDocument_references()<CR>
-nnoremap <silent><leader>m :call LanguageClient#textDocument_rename()<CR>
-nnoremap <silent><leader>l :call LanguageClient#textDocument_formatting()<CR>
-nnoremap <silent><leader>p :call LanguageClient#textDocument_hover()<CR>
-
-" Auto Format
-let g:formatdef_custom_html = '"js-beautify --html -A force-aligned -s 2"'
-let g:formatters_html = ['custom_html']
-autocmd FileType html nnoremap<buffer> <leader>l :Autoformat<CR>
-"let g:formatdef_custom_tsfmt = \"'tsfmt --useTsfmt ~/.config/vim_plugin/tsfmt.json --stdin '.bufname('%')"
-
-" Seoul256
-" let g:airline_theme='seoul256'
-" let g:seoul256_background = 238
-" let g:seoul256_light_background = 252
-" colo seoul256
-" colo seoul256-light
-
-" Luna
-" let g:airline_theme='luna'
-" colo luna
-
-" Seabird
-" colo greygull
-
-" SerialExperimentsLain
-" colo SerialExperimentsLain
-
-" Nova 
-" let g:airline_theme='nova'
-" colo nova
-
-" wwdc17
-" colo wwdc17
-" let g:wwdc17_term_italics = 0
-" let g:wwdc17_frame_color = 2
-
-" Srcery
-" colo srcery
-
-" PaperColor
-" set background=light
-" let g:airline_theme='pencil'
-" let g:PaperColor_Theme_Options = {
-  " \   'theme': {
-  " \     'default': { 
-  " \       'allow_bold': 0,
-  " \       'allow_italic': 0
-  " \     }
-  " \   }
-  " \ }
-
-" colorscheme PaperColor
-" let g:space_vim_dark_background = 236
-" colo space-vim-dark
-
-" Ayu
-" let ayucolor="light" " for mirage version of theme
-" colorscheme ayu
-
-" Pencil
-" let g:pencil_higher_contrast_ui = 1   " 0=low (def), 1=high
-" let g:pencil_neutral_code_bg = 0   " 0=gray (def), 1=normal
-" let g:pencil_gutter_color = 1
-" colo pencil
+nnoremap <silent> <leader>L :call CocAction('format')<cr>
 
