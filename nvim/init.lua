@@ -1,6 +1,0 @@
-require('plugins')
-require('plugins/nvim-treesitter')
-require('plugins/nvim-lspconfig')
-require('plugins/nvim-cmp')
-require('core/settings')
-require('core/keymaps')
